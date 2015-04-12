@@ -78,7 +78,7 @@ void setupAmountWidget(QLineEdit *widget, QWidget *parent)
 
 bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
 {
-    if(uri.scheme() != QString("barcoin"))
+    if(uri.scheme() != QString("spoonitcoin"))
         return false;
 
     // check if the address is valid
@@ -132,9 +132,9 @@ bool parseBitcoinURI(QString uri, SendCoinsRecipient *out)
     //
     //    Cannot handle this later, because barcoin:// will cause Qt to see the part after // as host,
     //    which will lowercase it (and thus invalidate the address).
-    if(uri.startsWith("barcoin://"))
+    if(uri.startsWith("spoonitcoin://"))
     {
-        uri.replace(0, 11, "barcoin:");
+        uri.replace(0, 11, "spoonitcoin:");
     }
     QUrl uriInstance(uri);
     return parseBitcoinURI(uriInstance, out);
@@ -278,12 +278,12 @@ bool ToolTipToRichTextFilter::eventFilter(QObject *obj, QEvent *evt)
 #ifdef WIN32
 boost::filesystem::path static StartupShortcutPath()
 {
-    return GetSpecialFolderPath(CSIDL_STARTUP) / "barcoin.lnk";
+    return GetSpecialFolderPath(CSIDL_STARTUP) / "SpoonITCoin.lnk";
 }
 
 bool GetStartOnSystemStartup()
 {
-    // check for barcoin.lnk
+    // check for SpoonITCoin.lnk
     return boost::filesystem::exists(StartupShortcutPath());
 }
 
@@ -360,7 +360,7 @@ boost::filesystem::path static GetAutostartDir()
 
 boost::filesystem::path static GetAutostartFilePath()
 {
-    return GetAutostartDir() / "barcoin.desktop";
+    return GetAutostartDir() / "SpoonITCoin.desktop";
 }
 
 bool GetStartOnSystemStartup()
@@ -401,7 +401,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         // Write a barcoin.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
-        optionFile << "Name=barcoin\n";
+        optionFile << "Name=SpoonITCoin\n";
         optionFile << "Exec=" << pszExePath << " -min\n";
         optionFile << "Terminal=false\n";
         optionFile << "Hidden=false\n";
@@ -422,10 +422,10 @@ bool SetStartOnSystemStartup(bool fAutoStart) { return false; }
 HelpMessageBox::HelpMessageBox(QWidget *parent) :
     QMessageBox(parent)
 {
-    header = tr("barcoin-qt") + " " + tr("version") + " " +
+    header = tr("spoonitcoin-qt") + " " + tr("version") + " " +
         QString::fromStdString(FormatFullVersion()) + "\n\n" +
         tr("Usage:") + "\n" +
-        "  barcoin-qt [" + tr("command-line options") + "]                     " + "\n";
+        "  spoonitcoin-qt [" + tr("command-line options") + "]                     " + "\n";
 
     coreOptions = QString::fromStdString(HelpMessage());
 
@@ -434,7 +434,7 @@ HelpMessageBox::HelpMessageBox(QWidget *parent) :
         "  -min                   " + tr("Start minimized") + "\n" +
         "  -splash                " + tr("Show splash screen on startup (default: 1)") + "\n";
 
-    setWindowTitle(tr("barcoin-qt"));
+    setWindowTitle(tr("spoonitcoin-qt"));
     setTextFormat(Qt::PlainText);
     // setMinimumWidth is ignored for QMessageBox so put in nonbreaking spaces to make it wider.
     setText(header + QString(QChar(0x2003)).repeated(50));

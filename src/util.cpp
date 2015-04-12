@@ -466,7 +466,7 @@ vector<unsigned char> ParseHex(const string& str)
 
 static void InterpretNegativeSetting(string name, map<string, string>& mapSettingsRet)
 {
-    // interpret -noBAR as -BAR=0 (and -noBAR=0 as -BAR=1) as long as -BAR not set
+    // interpret -noSTC as -STC=0 (and -noSTC=0 as -STC=1) as long as -STC not set
     if (name.find("-no") == 0)
     {
         std::string positive("-");
@@ -510,7 +510,7 @@ void ParseParameters(int argc, const char* const argv[])
     {
         string name = entry.first;
 
-        //  interpret --BAR as -BAR (as long as both are not set)
+        //  interpret --STC as -STC (as long as both are not set)
         if (name.find("--") == 0)
         {
             std::string singleDash(name.begin()+1, name.end());
@@ -519,7 +519,7 @@ void ParseParameters(int argc, const char* const argv[])
             name = singleDash;
         }
 
-        // interpret -noBAR as -BAR=0 (and -noBAR=0 as -BAR=1) as long as -BAR not set
+        // interpret -noSTC as -STC=0 (and -noSTC=0 as -STC=1) as long as -STC not set
         InterpretNegativeSetting(name, mapArgs);
     }
 }
@@ -972,13 +972,13 @@ void PrintExceptionContinue(std::exception* pex, const char* pszThread)
 boost::filesystem::path GetDefaultDataDir()
 {
     namespace fs = boost::filesystem;
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\barcoin
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\barcoin
-    // Mac: ~/Library/Application Support/barcoin
-    // Unix: ~/.barcoin
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\SpoonITCoin
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\SponoITCoin
+    // Mac: ~/Library/Application Support/SpoonITCoin
+    // Unix: ~/.SpoonITCoin
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "barcoin";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "SpoonITCoin";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -990,10 +990,10 @@ boost::filesystem::path GetDefaultDataDir()
     // Mac
     pathRet /= "Library/Application Support";
     fs::create_directory(pathRet);
-    return pathRet / "barcoin";
+    return pathRet / "SpoonITCoin";
 #else
     // Unix
-    return pathRet / ".barcoin";
+    return pathRet / ".SpoonITCoin";
 #endif
 #endif
 }
@@ -1035,7 +1035,7 @@ const boost::filesystem::path &GetDataDir(bool fNetSpecific)
 
 boost::filesystem::path GetConfigFile()
 {
-    boost::filesystem::path pathConfigFile(GetArg("-conf", "barcoin.conf"));
+    boost::filesystem::path pathConfigFile(GetArg("-conf", "SpoonITCoin.conf"));
     if (!pathConfigFile.is_complete()) pathConfigFile = GetDataDir(false) / pathConfigFile;
     return pathConfigFile;
 }
@@ -1045,7 +1045,7 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
 {
     boost::filesystem::ifstream streamConfig(GetConfigFile());
     if (!streamConfig.good())
-        return; // No barcoin.conf file is OK
+        return; // No SpoonITCoin.conf file is OK
 
     set<string> setOptions;
     setOptions.insert("*");
@@ -1206,10 +1206,10 @@ void AddTimeData(const CNetAddr& ip, int64 nTime)
                 if (!fMatch)
                 {
                     fDone = true;
-                    string strMessage = _("Warning: Please check that your computer's date and time are correct.  If your clock is wrong barcoin will not work properly.");
+                    string strMessage = _("Warning: Please check that your computer's date and time are correct.  If your clock is wrong your wallet will not work properly.");
                     strMiscWarning = strMessage;
                     printf("*** %s\n", strMessage.c_str());
-                    uiInterface.ThreadSafeMessageBox(strMessage+" ", string("barcoin"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION);
+                    uiInterface.ThreadSafeMessageBox(strMessage+" ", string("spoonitcoin"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION);
                 }
             }
         }
